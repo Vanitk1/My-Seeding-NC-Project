@@ -1,3 +1,3 @@
 # NC News Seeding
 
-- Instructions for this sprint can be found at https://l2c.northcoders.com/courses/be/seeding-nc-news
+create two .env files, One is the test and one is the real database.
