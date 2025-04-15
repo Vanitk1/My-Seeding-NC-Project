@@ -84,7 +84,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
         const result = await db.query(queryStr);
         const articleId = result.rows[0].article_id;
     
-        commentsValues.push([articleId, body, votes, author,convertTimestampToDate({ created_at }).created_at]);
+        commentsValues.push([articleId, body, votes, author, convertTimestampToDate({ created_at }).created_at]);
       }
     
       const commentsQuery = format(`
