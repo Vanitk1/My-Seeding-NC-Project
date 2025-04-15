@@ -66,10 +66,9 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       return db.query(userQuery);
     })
     .then(() => {
-      const articles = articleData.map(convertTimestampToDate);
 
-      const articleValues = articles.map(({title, topic, author, body, created_at, votes, article_img_url}) => {
-        return [title, topic, author, body, created_at, votes, article_img_url]
+      const articleValues = articleData.map(({title, topic, author, body, created_at, votes, article_img_url}) => {
+        return [title, topic, author, body, convertTimestampToDate({ created_at }).created_at, votes, article_img_url]
       })
       const articleQuery = format(`
         INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url)
@@ -77,17 +76,23 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
 
       return db.query(articleQuery);
     })
-    // .then(() => {
-    //   const comments = commentData.map(convertTimestampToDate);
+    .then(async () => {
+      const commentsValues = [];
+    
+      for (const { article_title, body, votes, author, created_at } of commentData) {
+        const queryStr = format(`SELECT article_id FROM articles WHERE title = %L`, article_title);
+        const result = await db.query(queryStr);
+        const articleId = result.rows[0].article_id;
+    
+        commentsValues.push([articleId, body, votes, author,convertTimestampToDate({ created_at }).created_at]);
+      }
+    
+      const commentsQuery = format(`
+        INSERT INTO comments (article_id, body, votes, author, created_at)
+        VALUES %L`, commentsValues);
+    
+      return db.query(commentsQuery);
+    });
 
-    //   const commentsValues = comments.map(({article_id, body, votes, author, created_at}) => {
-    //     return [article_id, body, votes, author, created_at]
-    //   })
-    //   const commentsQuery = format(`
-    //     INSERT INTO comments (article_id, body, votes, author, created_at)
-    //     VALUES %L`, commentsValues)
-
-    //   return db.query(commentsQuery);
-    // })
 }
 module.exports = seed;
