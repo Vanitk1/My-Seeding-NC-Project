@@ -51,7 +51,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
 
       const topicsQuery = format(`
         INSERT INTO topics (slug, description, img_url) 
-        VALUES %L`, topicValues
+        VALUES %L;`, topicValues
       )
       return db.query(topicsQuery);
     })
@@ -61,7 +61,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       })
       const userQuery = format(`
         INSERT INTO users (username, name, avatar_url)
-        VALUES %L`, userValues)
+        VALUES %L;`, userValues)
 
       return db.query(userQuery);
     })
@@ -72,7 +72,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       })
       const articleQuery = format(`
         INSERT INTO articles (title, topic, author, body, created_at, votes, article_img_url)
-        VALUES %L`, articleValues)
+        VALUES %L;`, articleValues)
 
       return db.query(articleQuery);
     })
@@ -80,7 +80,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       const commentsValues = [];
     
       for (const { article_title, body, votes, author, created_at } of commentData) {
-        const queryStr = format(`SELECT article_id FROM articles WHERE title = %L`, article_title);
+        const queryStr = format(`SELECT article_id FROM articles WHERE title = %L;`, article_title);
         const result = await db.query(queryStr);
         const articleId = result.rows[0].article_id;
     
@@ -89,7 +89,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
     
       const commentsQuery = format(`
         INSERT INTO comments (article_id, body, votes, author, created_at)
-        VALUES %L`, commentsValues);
+        VALUES %L;`, commentsValues);
     
       return db.query(commentsQuery);
     });

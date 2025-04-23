@@ -1,5 +1,10 @@
 # NC News Seeding
 
+The following command may need running first to start the PostrgreSQL server in order for the psql command to work: 
+
+sudo service postgresql start
+
+
 To run the repo locally, You need two enviroment files. 
 
 .env.test
