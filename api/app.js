@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const db = require("../db/connection");
-const { getEndPoints } = require("./controller");
+const { getEndPoints, getTopics } = require("./controller");
 
 
 app.use(express.json())
@@ -9,6 +9,9 @@ app.use(express.json())
 
 app.get("/api", getEndPoints);
 
+app.get("/api/topics", getTopics)
+
+app.get("/api/articles")
 
 app.all("/*splat", (req, res) => {
     res.status(404).send({ msg: "Nothing to see here" });
