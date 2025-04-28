@@ -4,6 +4,7 @@ const seed = require('../db/seeds/seed')
 const data = require('../db/data/development-data');
 const request = require("supertest");
 const app = require("../api/app");
+const { toBeSortedBy } = require("jest-sorted");
 //const endpoints = require("../endpoints.json")
 
 
@@ -89,6 +90,48 @@ describe("GET /api/articles/:article_id", () => {
     .expect(404)
     .then(({ body }) => {
       expect(body.msg).toBe("Not found")
+    });
+  });
+});
+
+describe("GET /api/articles", () => {
+  test("200, checks for an array of articles objects", () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({ body: {articles} }) => {
+      expect(Array.isArray(articles)).toBe(true)
+    });
+  });
+
+  test(" 200, checks to see if the article object has no body property)", () => {
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        articles.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              author: expect.any(String),
+              title: expect.any(String),
+              article_id: expect.any(Number),
+              topic: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              article_img_url: expect.any(String),
+              comment_count: expect.any(Number)
+            }));
+          expect(article).not.toHaveProperty("body");
+        });
+      });     
+    });
+  
+  test("200, articles are sorted in descending order by date", () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({ body: { articles } }) => {
+      expect(articles).toBeSortedBy("created_at", {descending: true}) // created_at is the column date
     })
   })
 });
