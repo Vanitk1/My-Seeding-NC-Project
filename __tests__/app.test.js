@@ -202,3 +202,40 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("PATCH /api/articles/:article_id", () => {
+  test("200, returns updated article", () => {
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 4 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            votes: expect.any(Number)
+          })
+        );
+      });
+  });
+
+  test("200, checks if votes are negative", () => {
+    return request(app)
+    .patch("/api/articles/2")
+    .send({ inc_votes: -2})
+    .expect(200)
+    .then(({body}) => {
+      expect(body.article.votes).toBeLessThanOrEqual(0)
+    })
+  })
+
+  test("400: article_id is not a number", () => {
+    return request(app)
+      .patch("/api/articles/not-a-number")
+      .send({ inc_votes: 1 })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("bad request");
+      });
+  });
+});

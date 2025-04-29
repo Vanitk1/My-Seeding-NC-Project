@@ -57,6 +57,26 @@
             }
           }
         }
-  }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "Updates the votes of an article",
+    "example_request_body": {
+      "inc_votes": 1
+    },
+    "responses": {
+      "200": {
+        "article": {
+          "article_id": 1,
+          "title": "Article title",
+          "topic": "topic",
+          "author": "author",
+          "body": "Article content",
+          "created_at": "timestamp",
+          "votes": 101,
+          "article_img_url": "http://..."
+        }
+     }
+   }
+ }
 }
 
