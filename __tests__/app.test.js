@@ -299,7 +299,7 @@ describe("PATCH /api/articles/:article_id", () => {
     })
   })
 
-  test("400: article_id is not a number", () => {
+  test("400, article_id is not a number", () => {
     return request(app)
       .patch("/api/articles/not-a-number")
       .send({ inc_votes: 1 })
@@ -307,7 +307,26 @@ describe("PATCH /api/articles/:article_id", () => {
       .then(({ body }) => {
         expect(body.msg).toBe("bad request");
       });
+  });
 
+  test("400, checks if wrong votes is sent when wrong data type is given", () => {
+    return request(app)
+    .patch("/api/articles/1")
+    .send({inc_votes: "cats"})
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Wrong votes")
+    });
+  });
+
+  test("400, returns a error if inc_votes is missing", () => {
+    return request(app)
+    .patch("/api/articles/1")
+    .send({})
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Wrong votes")
+    });
   });
 });
     
@@ -320,6 +339,24 @@ describe("DELETE api/comments/:comment_id", () => {
       expect(body).toEqual({})
     });
   });
+
+  test("404, if comment_id doesnt exist returns error", () => {
+    return request(app)
+    .delete("/api/comments/9999")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Comment does not exist");
+    });
+  })
+
+  test("400, returns a bad request when comment_id is invalid", () => {
+    return request (app)
+    .delete("/api/comments/cats")
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("bad request")
+    })
+  })
 });
 
 describe("GET api/users", () => {
@@ -339,6 +376,15 @@ describe("GET api/users", () => {
       });
     });
   });
+
+  test("404: responds with error for invalid route", () => {
+    return request(app)
+      .get("/api/userz")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Nothing to see here");
+      });
+    })
 });
 
 describe("GET /api/articles (sorting queries)", () => {

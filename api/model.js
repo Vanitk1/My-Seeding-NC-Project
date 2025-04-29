@@ -39,7 +39,7 @@ exports.selectArticles = (sort_by = "created_at", order = "DESC") => {
         return db.query(QueryStr)
         .then(({ rows }) => {
             return rows;
-        })
+        });
 }
 
 
@@ -83,17 +83,30 @@ exports.removeCommentId = (comment_id) => {
     return db.query (`DELETE FROM comments 
         WHERE comment_id = $1 
         RETURNING *`, [comment_id])
-        .then((result) => result.rows[0]);
+        .then(({ rows }) => {
+            if (rows.length === 0) {
+              return Promise.reject({ status: 404, msg: "Comment does not exist" });
+            }
+        })
+}
 
-} 
+exports.selectUsers = (sort_by = "username", order = "DESC") => {
+    const validColumns = ["username", "name", "avatar_url"]
+    const validOrder = ["ASC", "DESC"]
 
-exports.selectUsers = () => {
-    return db.query(`SELECT username, name, avatar_url 
-        FROM users`)
-        .then((results) => results.rows)
+    if (!validColumns.includes(sort_by)) {
+        return Promise.reject({ status: 400, msg: "invalid sort_by column" });
+      } else if (!validOrder.includes(order.toUpperCase())) {
+        return Promise.reject({ status: 400, msg: "invalid order query" });
+      }
+
+    const queryStr = `SELECT username, name, avatar_url 
+        FROM users
+        ORDER BY ${sort_by} ${order}`
+
+    return db.query(queryStr)
+    .then(({ rows }) => {
+        return rows;
+    });
 }
 //module.exports = {}
-
-
-// if (err.includes(author)) {
-    // return Promise.reject({status: 400, msg: "user doesnt exist"})

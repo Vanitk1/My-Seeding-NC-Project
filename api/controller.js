@@ -88,7 +88,8 @@ exports.deleteCommentId = (req, res, next) => {
 }
 
 exports.getUsers = (req, res, next) => {
-    selectUsers()
+    const {sort_by, order } = req.query;
+    selectUsers(sort_by, order)
     .then((users) => {
         res.status(200).send({users})
     })
