@@ -104,7 +104,10 @@ describe("GET /api/articles", () => {
     });
   });
 
-  test(" 200, checks to see if the article object has no body property)", () => {
+
+  test("200, checks to see if the article object has no body property", () => {
+
+
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -132,6 +135,50 @@ describe("GET /api/articles", () => {
     .expect(200)
     .then(({ body: { articles } }) => {
       expect(articles).toBeSortedBy("created_at", {descending: true}) // created_at is the column date
+
+    });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("checks for an array of comments for the given article_id", () => {
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(({ body: { comments } }) => {
+      comments.forEach((comment) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            article_id: expect.any(Number)
+          }));
+      });
+    }); 
+  });
+
+  test("200, checks for an empty array if article exists but has no comments", () => {
+    return request(app) 
+    .get("/api/articles/100/comments")
+    .expect(200)
+    .then(({ body: { comments } }) => {
+    expect(comments).toEqual([]);
+    });
+  });
+
+  test("400: returns bad request when number is given as a word instead", () => {
+    return request(app)
+      .get("/api/articles/not-a-number/comments")
+      .expect(400)
+      .then(({ body }) => {
+      expect(body.msg).toBe("bad request");
+    });
+  });
+
     })
   })
+
 });
