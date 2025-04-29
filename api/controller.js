@@ -28,7 +28,9 @@ exports.getArticleId = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-    selectArticles()
+    const { sort_by, order } = req.query;
+
+    selectArticles(sort_by, order)
     .then((articles) => {
         res.status(200).send({ articles })
     })
@@ -48,6 +50,10 @@ exports.getCommentsByArticleId = (req, res, next) => {
 exports.postCommentsByArticleId = (req, res, next) => {
     const { article_id } = req.params;
     const { username, body } = req.body;
+
+    if (!username || !body) {
+        return res.status(400).send({ msg: "Bad request" });
+      }
 
     insertCommentsByArticleId(username, article_id, body)
     .then((comment) => {
