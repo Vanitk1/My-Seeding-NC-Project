@@ -104,7 +104,10 @@ describe("GET /api/articles", () => {
     });
   });
 
+
   test("200, checks to see if the article object has no body property", () => {
+
+
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -132,6 +135,7 @@ describe("GET /api/articles", () => {
     .expect(200)
     .then(({ body: { articles } }) => {
       expect(articles).toBeSortedBy("created_at", {descending: true}) // created_at is the column date
+
     });
   });
 });
@@ -173,4 +177,8 @@ describe("GET /api/articles/:article_id/comments", () => {
       expect(body.msg).toBe("bad request");
     });
   });
+
+    })
+  })
+
 });

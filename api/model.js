@@ -30,6 +30,7 @@ exports.selectArticles = () => {
         })
 }
 
+
 exports.selectCommentsByArticleId = (article_id) => {
     return db.query (`SELECT comment_id, votes, created_at, author, body, article_id
         FROM comments
@@ -39,5 +40,6 @@ exports.selectCommentsByArticleId = (article_id) => {
             return rows;
         })
 }
+
 
 //module.exports = {}
