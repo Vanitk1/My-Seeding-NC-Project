@@ -46,12 +46,7 @@ exports.insertCommentsByArticleId = (username, article_id, body) => {
         VALUES ($1, $2, $3)
         RETURNING *`, [username, article_id, body])
         .then((result) => result.rows[0]) 
-        // .then(({ rows }) => {
-        //     return rows[0];
 
-        // });
-
-        // }); 
 }
 
 exports.updateArticleId = (article_id, inc_votes) => {
@@ -68,5 +63,11 @@ exports.removeCommentId = (comment_id) => {
         RETURNING 8`, [comment_id])
         .then((result) => result.rows[0]);
 
-}   
+} 
+
+exports.selectUsers = () => {
+    return db.query(`SELECT username, name, avatar_url 
+        FROM users`)
+        .then((results) => results.rows)
+}
 //module.exports = {}
