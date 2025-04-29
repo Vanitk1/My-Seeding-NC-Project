@@ -1,4 +1,4 @@
-const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId } = require("../api/model");
+const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId } = require("../api/model");
 const endpoints = require("../endpoints.json");
 const db = require("../db/connection");
 //const articles = require("../db/data/development-data/articles");
@@ -50,6 +50,21 @@ exports.postCommentsByArticleId = (req, res, next) => {
     insertCommentsByArticleId(username, article_id, body)
     .then((comment) => {
         res.status(201).send({ comment})
+    })
+    .catch(next);
+}
+
+exports.patchArticlesId = (req, res, next) => {
+    const { article_id } = req.params;
+    const { inc_votes } = req.body;
+
+    if(typeof inc_votes !== "number") {
+        return res.status(400).send({msg: "Wrong votes"})
+    }
+
+    updateArticleId(article_id, inc_votes)
+    .then((newArticle) => {
+        res.status(200).send({article: newArticle})
     })
     .catch(next);
 }
