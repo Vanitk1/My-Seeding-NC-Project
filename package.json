@@ -31,6 +31,7 @@
   "dependencies": {
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
+    "jest-sorted": "^1.0.15",
     "pg": "^8.15.6",
     "pg-format": "^1.0.4"
   },
@@ -38,5 +39,6 @@
     "setupFilesAfterEnv": [
       "jest-extended/all"
     ]
-  }
+  },
+  "test": "jest --runInBand"
 }

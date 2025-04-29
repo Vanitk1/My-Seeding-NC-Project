@@ -1,6 +1,7 @@
-const { selectTopics, selectArticleById } = require("../api/model");
+const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId } = require("../api/model");
 const endpoints = require("../endpoints.json");
 const db = require("../db/connection");
+const articles = require("../db/data/development-data/articles");
 
 exports.getEndPoints = (req, res, next) => {
     res.status(200).send({ endpoints })
@@ -21,7 +22,24 @@ exports.getArticleId = (req, res, next) => {
     .then((article) => {
         res.status(200).send({article})
     })
-    .catch(next)
-
+    .catch(next);
 };
+
+exports.getArticles = (req, res, next) => {
+    selectArticles()
+    .then((articles) => {
+        res.status(200).send({ articles })
+    })
+    .catch(next)
+}
+
+exports.getCommentsByArticleId = (req, res, next) => {
+    const { article_id } = req.params;
+
+    selectCommentsByArticleId(article_id)
+    .then((comments) => {
+        res.status(200).send({ comments })
+    })
+    .catch(next);
+}
 //module.exports = {}
