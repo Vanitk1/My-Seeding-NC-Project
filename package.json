@@ -41,5 +41,9 @@
       "jest-extended/all"
     ]
   },
-  "test": "jest --runInBand"
+  "test": {
+    "setupFilesAfterEnv": [
+      "jest --runInBand"
+    ]
+  }
 }

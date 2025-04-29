@@ -34,5 +34,10 @@ module.exports = [
     name: 'Jess Jelly',
     avatar_url:
       'https://vignette.wikia.nocookie.net/mrmen/images/4/4f/MR_JELLY_4A.jpg/revision/latest?cb=20180104121141'
+  },
+  {
+    username: "King Mittens 1st",
+    name: "Mittens",
+    avatar_url: "https://www.google.com/search?client=firefox-b-d&sca_esv=1ae1f5a229be0f0a&sxsrf=AHTn8zrxFalK0SWdL3FFlhi-w7wNdPxJEw:1745923306949&q=king+cat+mittens+1st&spell=1&sa=X&ved=2ahUKEwiX-Y-Uh_2MAxWLR0EAHXlHMsYQBSgAegQIChAB&biw=1920&bih=919&dpr=1"
   }
 ];

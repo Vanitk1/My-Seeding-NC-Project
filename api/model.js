@@ -38,8 +38,19 @@ exports.selectCommentsByArticleId = (article_id) => {
         ORDER BY created_at DESC`, [article_id])
         .then(({ rows }) => {
             return rows;
-        })
+        });
 }
 
+exports.insertCommentsByArticleId = (username, article_id, body) => {
+    return db.query (`INSERT INTO comments (author, article_id, body)
+        VALUES ($1, $2, $3)
+        RETURNING *`, [username, article_id, body])
+        .then((result) => result.rows[0]) 
+        // .then(({ rows }) => {
+        //     return rows[0];
+        // });
+        
+    
+}
 
 //module.exports = {}

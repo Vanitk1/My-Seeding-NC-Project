@@ -3,10 +3,10 @@ const db = require("../db/connection")
 const seed = require('../db/seeds/seed')
 const data = require('../db/data/development-data');
 const request = require("supertest");
+const express = require("express");
 const app = require("../api/app");
 const { toBeSortedBy } = require("jest-sorted");
 //const endpoints = require("../endpoints.json")
-
 
 /* Set up your test imports here */
 
@@ -104,10 +104,7 @@ describe("GET /api/articles", () => {
     });
   });
 
-
   test("200, checks to see if the article object has no body property", () => {
-
-
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -177,8 +174,31 @@ describe("GET /api/articles/:article_id/comments", () => {
       expect(body.msg).toBe("bad request");
     });
   });
+});
 
-    })
-  })
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201, checks if a comment is posted", () => {
+    const newComment = {
+      username: "King Mittens 1st",
+      body: "test comment"
+    };
 
+    return request(app)
+      .post("/api/articles/7/comments")
+      .send(newComment)
+      .expect(201)
+      .then((response) => {
+        const { comment } = response.body;
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            author: "King Mittens 1st",
+            article_id: 7,
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            body: "test comment"
+          })
+        );
+      });
+  });
 });
