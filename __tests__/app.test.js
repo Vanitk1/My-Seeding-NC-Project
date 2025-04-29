@@ -201,6 +201,76 @@ describe("POST /api/articles/:article_id/comments", () => {
         );
       });
   });
+
+  test("201, ignores all unnecessary properties on the request body", () => {
+    const newComments = {
+      username: "King Mittens 1st",
+      body: "test comment",
+      age: 4,
+      likes: "sleeping"
+    }
+
+    return request(app)
+    .post("/api/articles/7/comments")
+    .send(newComments)
+    .expect(201)
+    .then(({ body }) => {
+      expect(body.comment).toEqual(
+        expect.objectContaining({
+          comment_id: expect.any(Number),
+          author: "King Mittens 1st",
+          article_id: 7,
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          body: "test comment"
+        })
+      )
+    })
+  })
+
+  test("400, checks for an error when body is missing", () => {
+    return request(app)
+    .post("/api/articles/7/comments")
+    .send({username: "King Mittens 1st"})
+    .expect(400)
+  })
+
+  test("400, checks for an error when username is missing", () => {
+    return request(app)
+    .post("/api/articles/7/comments")
+    .send({body: "test comment"})
+    .expect(400)
+  })
+
+  test("404, returns this error if article doesnt exist", () => {
+    const errComment = {
+      username: "Nathan",
+      body: "set to fail"
+    }
+
+    return request(app)
+    .post("/api/articles/9999/comments")
+    .send(errComment)
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Article does not exist");
+    });
+  })
+
+  test("404, returns this error if user doesnt exist", () => {
+    const errComments = {
+      username: "fhsbfsj",
+      body: "test set to fail"
+    }
+    return request(app)
+    .post("/api/articles/7/comments")
+    .send(errComments)
+    .expect(404)
+    .then(({ body}) => {
+      expect(body.msg).toBe("User doesnt exist")
+    })
+  })
+
 });
 
 describe("PATCH /api/articles/:article_id", () => {
@@ -270,3 +340,45 @@ describe("GET api/users", () => {
     });
   });
 });
+
+describe("GET /api/articles (sorting queries)", () => {
+  test("200, sort articles in ASC", () => {
+    return request(app)
+    .get("/api/articles?sort_by=votes&order=ASC")
+    .expect(200)
+    .then(({ body}) => {
+      expect(body.articles).toBeSortedBy("votes", {ascending: true})
+    })
+  })
+
+  test("200, sort articles by title in DESC", () => {
+    return request(app)
+    .get("/api/articles?sort_by=title&order=DESC")
+    .expect(200)
+    .then(({ body}) => {
+      expect(body.articles).toBeSortedBy("title", {descending: true})
+    })
+    /* Can change the sort_by <any column> and the order by ASC/DESC
+    to any of the vaild columns set in the model.js.
+    remeber to change the "title" to the correct column too.
+    */
+  })
+
+  test("400, bad request for sort_by", () => {
+    return request(app)
+    .get("/api/articles?sort_by=cats")
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("sort_by column not found")
+    })
+  })
+
+  test("400, bad request for order query", () => {
+    return request(app)
+    .get("/api/articles?order=up")
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("incorrect order query")
+    })
+  })
+})
