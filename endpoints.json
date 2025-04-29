@@ -58,6 +58,7 @@
           }
         }
   },
+
   "PATCH /api/articles/:article_id": {
     "description": "Updates the votes of an article",
     "example_request_body": {
@@ -77,6 +78,14 @@
         }
      }
    }
- }
+ },
+
+  "DELETE /apicomments/:comment_id": {
+    "description": "Deletes a comments by id",
+    "responses": {
+      "204": "No content"
+    }
+  }
+
 }
 

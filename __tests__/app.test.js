@@ -237,5 +237,15 @@ describe("PATCH /api/articles/:article_id", () => {
       .then(({ body }) => {
         expect(body.msg).toBe("bad request");
       });
+
   });
 });
+    
+describe("DELETE api/comments/:comment_id", () => {
+  test("204, checks to see if comment is deleted", () => {
+    return request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+    .then(({body}) => {
+      expect(body).toEqual({})
+    });

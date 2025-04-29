@@ -1,4 +1,6 @@
-const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId } = require("../api/model");
+
+const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId, removeCommentId } = require("../api/model");
+
 const endpoints = require("../endpoints.json");
 const db = require("../db/connection");
 //const articles = require("../db/data/development-data/articles");
@@ -49,7 +51,7 @@ exports.postCommentsByArticleId = (req, res, next) => {
 
     insertCommentsByArticleId(username, article_id, body)
     .then((comment) => {
-        res.status(201).send({ comment})
+        res.status(201).send({ comment })
     })
     .catch(next);
 }
@@ -65,6 +67,16 @@ exports.patchArticlesId = (req, res, next) => {
     updateArticleId(article_id, inc_votes)
     .then((newArticle) => {
         res.status(200).send({article: newArticle})
+    })
+    .catch(next);
+}
+
+exports.deleteCommentId = (req, res, next) => {
+    const { comment_id } = req.params;
+
+    removeCommentId(comment_id)
+    .then(() => {
+        res.status(204).send()
     })
     .catch(next);
 }
