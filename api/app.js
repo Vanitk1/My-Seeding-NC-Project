@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 //const http = require("http")
 const db = require("../db/connection");
-const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId } = require("./controller");
+const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId, getUsers } = require("./controller");
 
 app.use(express.json())
 
@@ -24,7 +24,7 @@ app.patch("/api/articles/:article_id", patchArticlesId);
 
 app.delete("/api/comments/:comment_id", deleteCommentId);
 
-
+app.get("/api/users", getUsers);
 
 app.all("/*splat", (req, res) => {
     res.status(404).send({ msg: "Nothing to see here" });

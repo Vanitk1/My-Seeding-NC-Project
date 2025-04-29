@@ -1,5 +1,5 @@
 
-const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId, removeCommentId } = require("../api/model");
+const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId, removeCommentId, selectUsers } = require("../api/model");
 
 const endpoints = require("../endpoints.json");
 const db = require("../db/connection");
@@ -81,4 +81,11 @@ exports.deleteCommentId = (req, res, next) => {
     .catch(next);
 }
 
+exports.getUsers = (req, res, next) => {
+    selectUsers()
+    .then((users) => {
+        res.status(200).send({users})
+    })
+    .catch(next)
+}
 //module.exports = {}

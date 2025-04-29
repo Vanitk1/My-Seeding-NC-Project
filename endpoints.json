@@ -80,12 +80,22 @@
    }
  },
 
-  "DELETE /apicomments/:comment_id": {
-    "description": "Deletes a comments by id",
+  "DELETE /api/comments/:comment_id": {
+    "description": "Deletes a comment by id",
     "responses": {
       "204": "No content"
     }
-  }
+  },
 
+  "GET /api/users": {
+    "description": "get a user",
+    "exampleResponse": {
+      "users": {
+        "username": "tickle122",
+        "name": "Tom Tickle",
+        "avatar_url":"https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
+      }
+    }
+  }
 }
 
