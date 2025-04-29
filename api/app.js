@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 //const http = require("http")
 const db = require("../db/connection");
-const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId } = require("./controller");
+const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, deleteCommentId } = require("./controller");
 
 app.use(express.json())
 
@@ -18,7 +18,9 @@ app.get("/api/articles", getArticles);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
-app.post("/api/articles/:article_id/comments", postCommentsByArticleId)
+app.post("/api/articles/:article_id/comments", postCommentsByArticleId);
+
+app.delete("/api/comments/:comment_id", deleteCommentId);
 
 app.all("/*splat", (req, res) => {
     res.status(404).send({ msg: "Nothing to see here" });

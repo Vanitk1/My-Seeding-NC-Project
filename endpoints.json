@@ -57,6 +57,13 @@
             }
           }
         }
+  },
+
+  "DELETE /apicomments/:comment_id": {
+    "description": "Deletes a comments by id",
+    "responses": {
+      "204": "No content"
+    }
   }
 }
 
