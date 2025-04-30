@@ -335,9 +335,6 @@ describe("DELETE api/comments/:comment_id", () => {
     return request(app)
     .delete("/api/comments/1")
     .expect(204)
-    .then(({body}) => {
-      expect(body).toEqual({})
-    });
   });
 
   test("404, if comment_id doesnt exist returns error", () => {
@@ -365,6 +362,7 @@ describe("GET api/users", () => {
     .get("/api/users")
     .expect(200)
     .then(({body}) => {
+      expect(body.users).toHaveLength(7) // users.js contains 7 users
       body.users.forEach((user) => {
         expect(user).toEqual((
           expect.objectContaining({
@@ -385,6 +383,24 @@ describe("GET api/users", () => {
         expect(body.msg).toBe("Nothing to see here");
       });
     })
+
+  test("400, returns an error when column is invalid", () => {
+    return request(app)
+    .get("/api/users?sort_by=tools")
+    .expect(400)
+    .then(({ body}) => {
+      expect(body.msg).toBe("invalid sort_by column")
+    })
+  })
+
+  test("400, returns an error when order is invalid", () => {
+    return request(app)
+    .get("/api/users?sort_by=name&order=up")
+    .expect(400)
+    .then(({ body}) => {
+      expect(body.msg).toBe("invalid order query")
+    })
+  })
 });
 
 describe("GET /api/articles (sorting queries)", () => {
@@ -428,3 +444,25 @@ describe("GET /api/articles (sorting queries)", () => {
     })
   })
 })
+
+describe("GET api/articles?topics", () => {
+  test("200, filters articles by topics", () => {
+    return request(app)
+    .get("/api/articles?topic=coding")
+    .expect(200)
+    .then(({ body }) => {
+      body.articles.forEach((article) => {
+        expect(article.topic).toBe("coding");
+      });
+    });
+  });
+
+  test("404, if topic does not exist, returns error", () => {
+    return request(app)
+    .get("/api/articles?topic=faketopic")
+    .expect(404)
+    .then(({ body}) => {
+      expect(body.msg).toBe("topic not found")
+    })
+  })
+});
