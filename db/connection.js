@@ -14,7 +14,9 @@ if (ENV === "production") {
 
 if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
     throw new Error("No PGDATABASE or DATABASE_URL configured")
-} else { 
+} else if(process.env.DATABASE_URL) { 
+    console.log(`Connected to ${process.env.DATABASE_URL}`)
+} else {
     console.log(`Connected to ${process.env.PGDATABASE}`)
 }
 
