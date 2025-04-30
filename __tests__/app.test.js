@@ -55,7 +55,7 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  test("200. checks if the article object contains all the properties ", () => {
+  test("200. checks if the article object contains all the properties and the comment_count ", () => {
     return request(app)
     .get("/api/articles/3") // change the number to test for more articles
     .expect(200)
@@ -69,7 +69,8 @@ describe("GET /api/articles/:article_id", () => {
           topic: expect.any(String),
           created_at: expect.any(String),
           votes: expect.any(Number),
-          article_img_url: expect.any(String)
+          article_img_url: expect.any(String),
+          comment_count: expect.any(Number)
         })
       )
     })
