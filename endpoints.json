@@ -98,6 +98,23 @@
         "avatar_url":"https://vignette.wikia.nocookie.net/mrmen/images/d/d6/Mr-Tickle-9a.png/revision/latest?cb=20180127221953"
       }
     }
+  },
+
+  "GET /api/articles/:article_id": {
+    "description": "returns the comment_count",
+    "exampleResponse": {
+      "article": {
+        "article_id": 1,
+          "title": "Article title",
+          "topic": "topic",
+          "author": "author",
+          "body": "Article content",
+          "created_at": "timestamp",
+          "votes": 101,
+          "comment_count": 6,
+          "article_img_url": "http://..."
+      }
+    }
   }
 }
 
