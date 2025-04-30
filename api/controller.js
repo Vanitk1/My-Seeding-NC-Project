@@ -5,7 +5,7 @@ const endpoints = require("../endpoints.json");
 const db = require("../db/connection");
 //const articles = require("../db/data/development-data/articles");
 
-exports.getEndPoints = (req, res, next) => {
+exports.getEndPoints = (req, res) => {
     res.status(200).send({ endpoints })
 }
 
