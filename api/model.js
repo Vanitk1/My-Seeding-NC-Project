@@ -20,26 +20,37 @@ exports.selectArticleById = (article_id) => {
      })
 }
 
-exports.selectArticles = (sort_by = "created_at", order = "DESC") => {
+exports.selectArticles = (sort_by = "created_at", order = "DESC", topic = "cooking") => {
     const validColumns = ["author", "title", "article_id", "topic", "created_at", "votes", "comment_count", "article_img_url"]
-    const vaildOrder = ["ASC", "DESC"]
+    const validOrder = ["ASC", "DESC"]
+    const validTopics = ["cooking", "coding", "football"]
 
     if(!validColumns.includes(sort_by)) {
         return Promise.reject({status: 400, msg: "sort_by column not found"})
-    } else if (!vaildOrder.includes(order)) {
-        return Promise.reject({status: 400, msg: "incorrect order query"})
+    } else if (!validOrder.includes(order)) {
+        return Promise.reject({status: 400, msg: "incorrect order query"}) // 400 syntax error 
+    } else if (!validTopics.includes(topic)) {
+        return Promise.reject({status: 404, msg: "topic not found"}) // 404 doesnt exist
+    }
+
+    const topicValues = [];
+    let result = "";
+
+    if(topic) {
+        result = `WHERE articles.topic = $1`
+        topicValues.push(topic)
     }
 
     const QueryStr =`SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)::INT AS comment_count
         FROM articles
-        LEFT JOIN comments ON comments.article_id = articles.article_id
+        LEFT JOIN comments ON comments.article_id = articles.article_id ${result}
         GROUP BY articles.article_id
         ORDER BY ${sort_by} ${order}`
 
-        return db.query(QueryStr)
+        return db.query(QueryStr, topicValues)
         .then(({ rows }) => {
-            return rows;
-        });
+            return rows
+        })
 }
 
 
@@ -81,7 +92,7 @@ exports.updateArticleId = (article_id, inc_votes) => {
 
 exports.removeCommentId = (comment_id) => {
     return db.query (`DELETE FROM comments 
-        WHERE comment_id = $1 
+        WHERE comment_id = $1
         RETURNING *`, [comment_id])
         .then(({ rows }) => {
             if (rows.length === 0) {
@@ -96,7 +107,7 @@ exports.selectUsers = (sort_by = "username", order = "DESC") => {
 
     if (!validColumns.includes(sort_by)) {
         return Promise.reject({ status: 400, msg: "invalid sort_by column" });
-      } else if (!validOrder.includes(order.toUpperCase())) {
+      } else if (!validOrder.includes(order)) {
         return Promise.reject({ status: 400, msg: "invalid order query" });
       }
 
