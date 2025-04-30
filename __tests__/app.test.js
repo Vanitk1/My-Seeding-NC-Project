@@ -4,7 +4,7 @@ const seed = require('../db/seeds/seed')
 const data = require('../db/data/development-data');
 const request = require("supertest");
 const express = require("express");
-const app = require("../api/app");
+const app = require("../app");
 const { toBeSortedBy } = require("jest-sorted");
 //const endpoints = require("../endpoints.json")
 

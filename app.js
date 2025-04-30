@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 //const http = require("http")
-const db = require("../db/connection");
-const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId, getUsers } = require("./controller");
+const db = require("./db/connection");
+const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId, getUsers } = require("./api/controller");
 
 app.use(express.json())
 

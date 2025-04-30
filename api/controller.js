@@ -1,6 +1,5 @@
 
 const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId, removeCommentId, selectUsers } = require("../api/model");
-
 const endpoints = require("../endpoints.json");
 const db = require("../db/connection");
 //const articles = require("../db/data/development-data/articles");
