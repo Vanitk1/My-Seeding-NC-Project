@@ -1,7 +1,8 @@
 
-const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId, removeCommentId, selectUsers } = require("../api/model");
+const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId, removeCommentId, selectUsers, updateCommentId, insertArticle } = require("../api/model");
 const endpoints = require("../endpoints.json");
 const db = require("../db/connection");
+const { articleData } = require("../db/data/development-data");
 
 exports.getEndPoints = (req, res) => {
     res.status(200).send({ endpoints })
@@ -64,10 +65,6 @@ exports.patchArticlesId = (req, res, next) => {
     const { article_id } = req.params;
     const { inc_votes } = req.body;
 
-    if(typeof inc_votes !== "number") {
-        return res.status(400).send({msg: "Wrong votes"})
-    }
-
     updateArticleId(article_id, inc_votes)
     .then((newArticle) => {
         res.status(200).send({article: newArticle})
@@ -90,6 +87,27 @@ exports.getUsers = (req, res, next) => {
     selectUsers(sort_by, order)
     .then((users) => {
         res.status(200).send({users})
+    })
+    .catch(next)
+}
+
+exports.patchCommentId = (req, res, next) => {
+    const { comment_id } = req.params;
+    const { inc_votes } = req.body;
+
+    updateCommentId(comment_id, inc_votes)
+    .then((comment) => {
+        res.status(200).send({comment})
+    })
+    .catch(next)
+}
+
+exports.postArticles = (req, res, next) => {
+    const articleInfo = req.body;
+
+    insertArticle(articleInfo)
+    .then((newArticle) => {
+        res.status(201).send({article: newArticle})
     })
     .catch(next)
 }

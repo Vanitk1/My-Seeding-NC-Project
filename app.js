@@ -3,7 +3,7 @@ const app = express();
 //const http = require("http")
 const db = require("./db/connection");
 const router = require("./api/router");
-const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId, getUsers } = require("./api/controller");
+//const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId, getUsers } = require("./api/controller");
 
 app.use(express.json());
 

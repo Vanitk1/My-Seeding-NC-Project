@@ -363,7 +363,7 @@ describe("GET api/users", () => {
     .get("/api/users")
     .expect(200)
     .then(({body}) => {
-      expect(body.users).toHaveLength(7) // users.js contains 7 users
+      expect(body.users).toHaveLength(8) // users.js contains 8 users
       body.users.forEach((user) => {
         expect(user).toEqual((
           expect.objectContaining({
@@ -383,7 +383,7 @@ describe("GET api/users", () => {
       .then(({ body }) => {
         expect(body.msg).toBe("Nothing to see here");
       });
-    })
+    });
 
   test("400, returns an error when column is invalid", () => {
     return request(app)
@@ -391,8 +391,8 @@ describe("GET api/users", () => {
     .expect(400)
     .then(({ body}) => {
       expect(body.msg).toBe("invalid sort_by column")
-    })
-  })
+    });
+  });
 
   test("400, returns an error when order is invalid", () => {
     return request(app)
@@ -400,8 +400,25 @@ describe("GET api/users", () => {
     .expect(400)
     .then(({ body}) => {
       expect(body.msg).toBe("invalid order query")
-    })
-  })
+    });
+  });
+
+  test("200, returns a user by username", () => {
+    return request(app)
+    .get("/api/users?username=TomTickle")
+    .expect(200)
+    .then(({ body }) => {
+      body.users.forEach((user) => {
+        expect(user).toEqual((
+          expect.objectContaining({
+            username: expect.any(String),
+            name: expect.any(String),
+            avatar_url: expect.any(String)
+          })
+        ));
+      });
+    });
+  });
 });
 
 describe("GET /api/articles (sorting queries)", () => {
@@ -464,6 +481,105 @@ describe("GET api/articles?topics", () => {
     .expect(404)
     .then(({ body}) => {
       expect(body.msg).toBe("topic not found")
+    })
+  })
+});
+
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: updates and returns the comment with incremented votes", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 3 })
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: 1,
+            votes: expect.any(Number)
+          })
+        );
+      });
+  });
+
+  test("400: invalid inc_votes type", () => {
+    return request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: "two" })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Wrong votes");
+      });
+  });
+})
+
+describe("POST api/articles", () => {
+  test("201, returns new article", () => {
+    const newArticle = {
+      author: "Queen Mittens 1st",
+      title: "How to take over the world",
+      body: "Cats will rule the world!",
+      topic: "World domination",
+      article_img_url: "https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    }
+
+    return request(app)
+    .post("/api/articles")
+    .send(newArticle)
+    .expect(201)
+    .then(({ body: { article }}) => {
+      expect(article).toEqual(
+        expect.objectContaining({
+          article_id: expect.any(Number),
+          author: expect.any(String),
+          title: expect.any(String),
+          body: expect.any(String),
+          topic: expect.any(String),
+          article_img_url: expect.any(String),
+          votes: expect.any(Number),
+          created_at:expect.any(String),
+          comment_count: expect.any(Number)
+        })
+      );
+    });
+  });
+
+  test("201, Checks if the article is actually added", () => {
+    const newArticle = {
+      author: "Queen Mittens 1st",
+      title: "How to take over the world",
+      body: "Cats will rule the world!",
+      topic: "World domination",
+      article_img_url: "https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    }
+
+    return request(app)
+    .post("/api/articles")
+    .send(newArticle)
+    .expect(201)
+    .then(({ body: { article }}) => {
+      expect(article).toEqual(
+        expect.objectContaining({
+          article_id: expect.any(Number),
+          author: "Queen Mittens 1st",
+          title: "How to take over the world",
+          body: "Cats will rule the world!",
+          topic: expect.any(String),
+          article_img_url: expect.any(String),
+          votes: expect.any(Number),
+          created_at:expect.any(String),
+          comment_count: expect.any(Number)
+        })
+      );
+    });
+  });
+
+  test("400, if one property is missing returns error", () => {
+    return request(app)
+    .post("/api/articles")
+    .send({author: "only author given"})
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Complete all required properties")
     })
   })
 });

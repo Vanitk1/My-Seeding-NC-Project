@@ -115,6 +115,50 @@
           "article_img_url": "http://..."
       }
     }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "Updates the vote count of a comment by comment_id.",
+    "example_request_body": {
+      "inc_votes": 1
+    },
+    "responses": {
+      "200": {
+        "comment": {
+        "comment_id": 1,
+        "votes": 17,
+        "created_at": "2020-10-31T03:03:00.000Z",
+        "author": "Queen mittens 1st",
+        "body": "test comment"
+        }
+      }
+    }
+  },
+  "POST /api/articles": {
+    "description": "",
+    "example_request_body": {
+      "example_request_body": {
+        "author": "Queen mittens 1st",
+        "title": "How to take over the world",
+        "body": "new article body",
+        "topic": "World domination",
+        "article_img_url": "https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+      },
+      "responses": {
+        "201": {
+          "article": {
+            "article_id": 1,
+            "author": "Queen mittens 1st",
+            "title": "How to take over the world",
+            "body": "new article body",
+            "topic": "World domination",
+            "article_img_url": "https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+            "votes": 27,
+            "created_at":"2020-10-31T03:03:00.000Z",
+            "comment_count": 5
+          }
+        }
+      }
+    }
   }
 }
 

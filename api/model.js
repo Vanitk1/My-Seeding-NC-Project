@@ -87,6 +87,11 @@ exports.insertCommentsByArticleId = (username, article_id, body) => {
 }
 
 exports.updateArticleId = (article_id, inc_votes) => {
+    
+    if(typeof inc_votes !== "number") {
+        return Promise.reject({ status: 400, msg: "Wrong votes" });
+    }
+    
     return db.query (`UPDATE articles SET votes = votes + $1
         WHERE article_id = $2
         RETURNING *`, [inc_votes, article_id])
@@ -123,5 +128,35 @@ exports.selectUsers = (sort_by = "username", order = "DESC") => {
     .then(({ rows }) => {
         return rows;
     });
+}
+
+exports.updateCommentId = (comment_id, inc_votes) => {
+
+    if(typeof inc_votes !== "number") {
+        return Promise.reject({ status: 400, msg: "Wrong votes" });
+    }
+
+    return db.query (`UPDATE comments 
+        SET votes = votes + $1
+        WHERE comment_id = $2
+        RETURNING *`,
+        [inc_votes, comment_id])
+        .then((results) => results.rows[0])
+}
+
+exports.insertArticle = ({ author, title, body, topic, article_img_url= "https://images.pexels.com/photos/416160/pexels-photo-416160.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" }) => {
+
+    if(!author || !title || !body || !topic ) {
+        return Promise.reject({status: 400, msg: "Complete all required properties"})
+    }
+
+    return db.query(`INSERT INTO articles (author, title, body, topic, article_img_url)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING *`, [author, title, body, topic, article_img_url])
+        .then(({ rows }) => {
+            rows[0].comment_count = 0; // manually adds comment_count to article
+            return rows[0];
+        })
+
 }
 //module.exports = {}
