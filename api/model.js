@@ -159,4 +159,17 @@ exports.insertArticle = ({ author, title, body, topic, article_img_url= "https:/
         })
 
 }
+
+exports.insertTopics = (slug, description, img_url = "https://...") => {
+
+    if(!slug || !description) {
+        return Promise.reject({status: 400, msg: "Complete all required properties"})
+    }
+
+    return db.query(`INSERT INTO topics (slug, description, img_url)
+        VALUES ($1, $2, $3)
+        RETURNING *`, 
+        [slug, description, img_url])
+        .then((results) => results.rows[0]);
+}
 //module.exports = {}

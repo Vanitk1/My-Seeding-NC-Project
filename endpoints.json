@@ -47,7 +47,7 @@
           "username": "String",
           "body": "String"
         },
-        "responses": {
+        "exampleResponse": {
           "201": {
             "comment": {
               "comment_id": 1,
@@ -66,7 +66,7 @@
     "example_request_body": {
       "inc_votes": 1
     },
-    "responses": {
+    "exampleResponse": {
       "200": {
         "article": {
           "article_id": 1,
@@ -84,7 +84,7 @@
 
   "DELETE /api/comments/:comment_id": {
     "description": "Deletes a comment by id",
-    "responses": {
+    "exampleResponse": {
       "204": "No content"
     }
   },
@@ -121,7 +121,7 @@
     "example_request_body": {
       "inc_votes": 1
     },
-    "responses": {
+    "exampleResponse": {
       "200": {
         "comment": {
         "comment_id": 1,
@@ -134,29 +134,42 @@
     }
   },
   "POST /api/articles": {
-    "description": "",
-    "example_request_body": {
+    "description": "Adds a new article to the database",
       "example_request_body": {
         "author": "Queen mittens 1st",
         "title": "How to take over the world",
         "body": "new article body",
         "topic": "World domination",
         "article_img_url": "https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-      },
-      "responses": {
-        "201": {
-          "article": {
-            "article_id": 1,
-            "author": "Queen mittens 1st",
-            "title": "How to take over the world",
-            "body": "new article body",
-            "topic": "World domination",
-            "article_img_url": "https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "votes": 27,
-            "created_at":"2020-10-31T03:03:00.000Z",
-            "comment_count": 5
-          }
+    },
+    "exampleResponse": {
+      "201": {
+        "article": {
+        "article_id": 1,
+        "author": "Queen mittens 1st",
+        "title": "How to take over the world",
+        "body": "new article body",
+        "topic": "World domination",
+        "article_img_url": "https://images.pexels.com/photos/1314550/pexels-photo-1314550.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "votes": 27,
+        "created_at":"2020-10-31T03:03:00.000Z",
+        "comment_count": 5
         }
+      }
+    }
+  },
+  "POST /api/topics": {
+    "description": "Adds a new topic to the database",
+    "example_request_body": {
+      "slug": "gym",
+      "description": "I like to workout!",
+      "img_url": "https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    "exampleResponse": {
+      "topic": {
+        "slug":"gym",
+        "description": "I like to workout!",
+        "img_url": "https://images.pexels.com/photos/841130/pexels-photo-841130.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
       }
     }
   }
