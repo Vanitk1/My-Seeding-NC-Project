@@ -131,4 +131,3 @@ exports.deleteArticleId = (req, res, next) => {
     })
     .catch(next);
 }
-
