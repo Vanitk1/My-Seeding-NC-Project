@@ -6,11 +6,7 @@ const request = require("supertest");
 const express = require("express");
 const app = require("../app");
 const { toBeSortedBy } = require("jest-sorted");
-//const endpoints = require("../endpoints.json")
 
-/* Set up your test imports here */
-
-/* Set up your beforeEach & afterAll functions here */
 beforeEach(() => {return seed(data)});
 
 afterAll(() => {return db.end()});
@@ -57,7 +53,7 @@ describe("GET /api/topics", () => {
 describe("GET /api/articles/:article_id", () => {
   test("200. checks if the article object contains all the properties and the comment_count ", () => {
     return request(app)
-    .get("/api/articles/3") // change the number to test for more articles
+    .get("/api/articles/3")
     .expect(200)
     .then(({ body: {article}}) => {
       expect(article).toEqual(
