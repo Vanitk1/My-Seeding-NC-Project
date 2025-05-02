@@ -42,6 +42,14 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run setup-db
+    
+      name: setup test env file
+    -  run: echo "PGDATABASE=nc_news_test" >> .env.test
+    -  run: echo "PGUSER=postgres" >> .env.test
+    -  run: echo "PGPASSWORD=postgres" >> .env.test
+    -  run: echo "PGHOST=localhost" >> .env.test
+    -  run: echo "PGPORT=5432" >> .env.test
+
+    - run: npm run setup-dbs
     - run: npm run build --if-present
     - run: npm test
