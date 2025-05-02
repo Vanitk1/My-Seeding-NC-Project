@@ -21,21 +21,15 @@ jobs:
       - name: Use PostgreSQL
         uses: harmon758/postgresql-action@v1
         with:
-          postgresql db: "my_db"
+          postgresql db: "test_db"
           postgresql user: "test_user"
           postgresql password: "test_password"
-        
-      - name: Create nc_news database
-        run: |
-          psql -U test_user -c "CREATE DATABASE nc_news;" -h localhost -d postgres
-        env:
-          PGPASSWORD: test_password
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run tests
-        run: PGDATABASE=nc_news PGUSER=test_user PGPASSWORD=test_password npm test
+        run: PGDATABASE=test_db PGUSER=test_user PGPASSWORD=test_password npm test
 
   deploy:
     name: Deploy
