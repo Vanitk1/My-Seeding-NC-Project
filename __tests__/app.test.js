@@ -434,10 +434,6 @@ describe("GET /api/articles (sorting queries)", () => {
     .then(({ body}) => {
       expect(body.articles).toBeSortedBy("created_at", {descending: true})
     })
-    /* Can change the sort_by <any column> and the order by ASC/DESC
-    to any of the vaild columns set in the model.js.
-    remeber to change the "title" to the correct column too.
-    */
   })
 
   test("400, bad request for sort_by", () => {
