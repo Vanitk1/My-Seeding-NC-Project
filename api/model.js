@@ -23,39 +23,52 @@ exports.selectArticleById = (article_id) => {
      })
 }
 
-exports.selectArticles = (sort_by = "created_at", order = "DESC", topic = "cooking") => {
-    const validColumns = ["author", "title", "article_id", "topic", "created_at", "votes", "comment_count", "article_img_url"]
-    const validOrder = ["ASC", "DESC"]
-    const validTopics = ["cooking", "coding", "football"]
+exports.selectArticles = (sort_by = "created_at", order = "DESC", topic) => {
+    const validColumns = ["author", "title", "article_id", "topic", "created_at", "votes", "comment_count", "article_img_url"];
+    const validOrder = ["ASC", "DESC"];
 
-    if(!validColumns.includes(sort_by)) {
-        return Promise.reject({status: 400, msg: "sort_by column not found"})
+    if (!validColumns.includes(sort_by)) {
+        return Promise.reject({ status: 400, msg: "sort_by column not found" });
     } else if (!validOrder.includes(order)) {
-        return Promise.reject({status: 400, msg: "incorrect order query"}) // 400 syntax error 
-    } else if (!validTopics.includes(topic)) {
-        return Promise.reject({status: 404, msg: "topic not found"}) // 404 doesnt exist
+        return Promise.reject({ status: 400, msg: "incorrect order query" });
     }
 
-    const topicValues = [];
-    let result = "";
+    let checkTopicExists;
 
-    if(topic) {
-        result = `WHERE articles.topic = $1`
-        topicValues.push(topic)
+    if (topic) {
+        checkTopicExists = db.query(`SELECT * FROM topics WHERE slug = $1`, [topic]);
+    } else {
+        checkTopicExists = Promise.resolve();
     }
 
-    const QueryStr =`SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, 
+    return checkTopicExists.then((results) => {
+        if (topic && results.rows.length === 0) {
+            return Promise.reject({ status: 404, msg: "topic not found" });
+        }
+
+        const topicValues = [];
+        let where = "";
+
+        if (topic) {
+            where = `WHERE articles.topic = $1`;
+            topicValues.push(topic);
+        }
+
+        const queryStr = `
+        SELECT articles.author, articles.title, articles.article_id, articles.topic,
+        articles.created_at, articles.votes, articles.article_img_url, 
         COUNT(comments.comment_id)::INT AS comment_count
         FROM articles
-        LEFT JOIN comments ON comments.article_id = articles.article_id ${result}
+        LEFT JOIN comments ON comments.article_id = articles.article_id ${where}
         GROUP BY articles.article_id
-        ORDER BY ${sort_by} ${order}`
+        ORDER BY ${sort_by} ${order};`;
 
-        return db.query(QueryStr, topicValues)
+        return db.query(queryStr, topicValues)
         .then(({ rows }) => {
-            return rows
-        })
-}
+            return rows;
+        });
+    });
+};
 
 
 exports.selectCommentsByArticleId = (article_id) => {
@@ -192,4 +205,3 @@ exports.removeArticleId = (article_id) => {
         });
       
 }
-//module.exports = {}
