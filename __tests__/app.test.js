@@ -610,3 +610,29 @@ describe("POST api/topics", () => {
     .expect(400)
   })
 })
+
+describe("DELETE /api/articles/:article_id", () => {
+  test("204, checks to see if article is deleted", () => {
+    return request(app)
+    .delete("/api/articles/1")
+    .expect(204)
+  });
+
+  test("404, if article_id doesnt exist returns error", () => {
+    return request(app)
+    .delete("/api/articles/9999")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Article does not exist");
+    });
+  })
+
+  test("400, returns a bad request when article_id is invalid", () => {
+    return request (app)
+    .delete("/api/articles/cats")
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("bad request")
+    })
+  })
+});

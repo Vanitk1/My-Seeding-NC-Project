@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router();
-const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId, getUsers, patchCommentId, postArticles, postTopics } = require("./controller");
+const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId, getUsers, patchCommentId, postArticles, postTopics, deleteArticleId } = require("./controller");
 
 router.get("/", getEndPoints);
 
@@ -27,5 +27,7 @@ router.patch("/comments/:comment_id", patchCommentId);
 router.post("/articles", postArticles);
 
 router.post("/topics", postTopics);
+
+router.delete("/articles/:article_id", deleteArticleId);
 
 module.exports = router

@@ -1,5 +1,5 @@
 
-const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId, removeCommentId, selectUsers, updateCommentId, insertArticle, insertTopics } = require("../api/model");
+const { selectTopics, selectArticleById, selectArticles, selectCommentsByArticleId, insertCommentsByArticleId, updateArticleId, removeCommentId, selectUsers, updateCommentId, insertArticle, insertTopics, removeArticleId } = require("../api/model");
 const endpoints = require("../endpoints.json");
 const db = require("../db/connection");
 const { articleData } = require("../db/data/development-data");
@@ -120,5 +120,15 @@ exports.postTopics = (req, res, next) => {
         res.status(201).send({ topic });
       })
       .catch(next)
-  };
+};
+
+exports.deleteArticleId = (req, res, next) => {
+    const { article_id } = req.params;
+
+    removeArticleId(article_id)
+    .then(() => {
+        res.status(204).send()
+    })
+    .catch(next);
+}
 //module.exports = {}

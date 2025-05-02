@@ -116,6 +116,13 @@
       }
     }
   },
+
+  "DELETE /api/articles/:article_id": {
+    "description": "Deletes article by id ",
+    "exampleResponse": {
+      "204": "no content"
+    }
+  },
   "PATCH /api/comments/:comment_id": {
     "description": "Updates the vote count of a comment by comment_id.",
     "example_request_body": {
