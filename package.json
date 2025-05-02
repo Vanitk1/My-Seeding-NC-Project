@@ -4,7 +4,7 @@
   "description": "bc-nc-news",
   "main": "listen.js",
   "scripts": {
-    "setup-dbs": "psql -f ./db/setup-dbs.sql",
+    "setup-dbs": "psql -h localhost -U postgres -d nc_news_test -f ./db/setup-dbs.sql",
     "seed-dev": "node ./db/seeds/run-seed.js",
     "test": "jest",
     "prepare": "husky install",
