@@ -46,6 +46,8 @@ exports.selectArticles = (sort_by = "created_at", order = "DESC", topic) => {
             return Promise.reject({ status: 404, msg: "topic not found" });
         }
 
+        
+
         const topicValues = [];
         let where = "";
 

@@ -429,10 +429,10 @@ describe("GET /api/articles (sorting queries)", () => {
 
   test("200, sort articles by title in DESC", () => {
     return request(app)
-    .get("/api/articles?sort_by=title&order=DESC")
+    .get("/api/articles?sort_by=created_at&order=DESC")
     .expect(200)
     .then(({ body}) => {
-      expect(body.articles).toBeSortedBy("title", {descending: true})
+      expect(body.articles).toBeSortedBy("created_at", {descending: true})
     })
     /* Can change the sort_by <any column> and the order by ASC/DESC
     to any of the vaild columns set in the model.js.
