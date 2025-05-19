@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
-//const http = require("http")
 const db = require("./db/connection");
 const router = require("./api/router");
-//const { getEndPoints, getTopics, getArticleId, getArticles, getCommentsByArticleId, postCommentsByArticleId, patchArticlesId, deleteCommentId, getUsers } = require("./api/controller");
+const cors = require('cors');
+
+app.use(cors());
 
 app.use(express.json());
 
