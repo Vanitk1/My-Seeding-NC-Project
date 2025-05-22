@@ -4,9 +4,20 @@ Heres a link to the hosted version
 
 https://my-seeding-nc-project.onrender.com/
 
+---------
+
 **Summary**
 
-In this project i built APIs for the purpose of accessing application data. The purpose of this project is to minic real world back-end websites e.g. Reddit, Facebook, Google etc. Built with node.js and postgresSQL.
+In this project i built APIs for the purpose of accessing application data. The purpose of this project is to minic real world back-end websites e.g. Reddit, Facebook, Google etc. 
+
+---------
+
+**Technologies**
+
+- Node.js, Express, PostgreSQL
+- Hosting: Render (back end)  
+
+---------
 
 **installation**
 
@@ -29,6 +40,9 @@ To run the repo locally, You need two enviroment files.
 .env.test
 .env.development
 
+
+---------
+
 **Instructions for set up .env**
 
 env.test:
@@ -50,15 +64,21 @@ Run `npm run setup-dbs` to create both a test and development database afterward
 
 Should return a message in the terminal saying connected to `database_name`.
 
+---------
+
 **database setup**
 
 In the terminal type `npm run seed` 
 
 This will set up the database. 
 
+---------
+
 **running tests**
 
 Use `npm test` in the terminal to run tests.
+
+---------
 
 **additional information**
 
